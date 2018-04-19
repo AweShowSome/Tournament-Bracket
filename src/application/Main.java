@@ -8,8 +8,6 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.effect.DropShadow;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
@@ -39,19 +37,25 @@ public class Main extends Application {
                 }
             });
             
-            fileButton.addEventHandler(MouseEvent.MOUSE_ENTERED, new EventHandler<MouseEvent>() {
-                @Override
-                public void handle(MouseEvent e) {
-                    fileButton.setEffect(new DropShadow());
-                }
-            });
+            fileButton.setId("bevel-grey");
             
-            fileButton.addEventHandler(MouseEvent.MOUSE_EXITED, new EventHandler<MouseEvent>() {
-                @Override
-                public void handle(MouseEvent e) {
-                    fileButton.setEffect(null);
-                }
-            });
+            // fileButton.addEventHandler(MouseEvent.MOUSE_ENTERED, new EventHandler<MouseEvent>() {
+            // @Override
+            // public void handle(MouseEvent e) {
+            // fileButton.setEffect(new DropShadow());
+            // }
+            // });
+            
+            // fileButton.addEventHandler(MouseEvent.MOUSE_EXITED, new EventHandler<MouseEvent>() {
+            // @Override
+            // public void handle(MouseEvent e) {
+            // DropShadow shad = new DropShadow();
+            // shad.setColor(Color.color(0, 0, 0.6));
+            // shad.setOffsetY(1);
+            // shad.setRadius(5);
+            // fileButton.setEffect(shad);
+            // }
+            // });
             
             // Set Window widgets
             root.setTop(Title);

@@ -9,3 +9,11 @@
     -fx-text-fill: black;
     -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 5, 0.0 , 0 , 1 );
 }
+
+#bevel-grey:hover{
+    -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 5, 0.5 , 0 , 0 );
+}
+
+#bevel-grey:pressed{
+    -fx-effect: innershadow( three-pass-box , rgba(0,0,0,0.6) , 2, 0.5 , 1 , 1 );
+}
