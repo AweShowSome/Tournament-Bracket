@@ -5,10 +5,10 @@ public class Game {
     // Round names for single elimination
     private static String[] rounds = { "Grand Finals", "Winner's Semi's", "Winner's Quarters", "Winner's Eighths", "Top 32", "Top 64", "Top 128" };
     private Player p1, p2; // players 1 and 2 respectively
-    int s1, s2; // Scores for player1 & player2 respectively
+    public int s1, s2; // Scores for player1 & player2 respectively
     private final int round; // Round Game is part of (Corralates with array index its in)
-    Player winner; // Winner of the match
-    Game topGame, bottomGame, parentGame; // Gets relative location
+    public Player winner; // Winner of the match
+    private Game topGame, bottomGame, parentGame; // Gets relative location
     
     public Game(int round, Game parentGame) {
         p1 = null;
@@ -16,7 +16,7 @@ public class Game {
         s1 = 0;
         s2 = 0;
         this.round = round;
-        if (parentGame != null) {
+        if (parentGame != null) { // Don't want null pointer exceptions
             this.parentGame = parentGame;
             parentGame.setChild(this);
         }
@@ -28,22 +28,17 @@ public class Game {
         s1 = 0;
         s2 = 0;
         this.round = round;
-        this.parentGame = parentGame;
-        parentGame.setChild(this);
+        if (parentGame != null) { // Don't want null pointer exceptions
+            this.parentGame = parentGame;
+            parentGame.setChild(this);
+        }
     }
     
-    public void setScore(int s1, int s2) {
-        this.s1 = s1;
-        this.s2 = s2;
-    }
+    // - - - - - Helper Methods - - - - - \\
     
-    public void setChild(Game child) {
-        if (topGame != null)
-            bottomGame = child;
-        else
-            topGame = child;
-    }
-    
+    /**
+     * toString for debugging purposes
+     */
     @Override
     public String toString() {
         String s = rounds[round] + ":\n";
@@ -69,5 +64,46 @@ public class Game {
             s += "Game not created";
         s += "\n";
         return s;
+    }
+    
+    // - - - - - Getters & Setters - - - - - \\
+    
+    public Game getTop() {
+        return topGame;
+    }
+    
+    public Game getBottom() {
+        return bottomGame;
+    }
+    
+    public Game getParent() {
+        return parentGame;
+    }
+    
+    public void setS1(int s1) {
+        this.s1 = s1;
+    }
+    
+    public void setS2(int s2) {
+        this.s2 = s2;
+    }
+    
+    public void setP1(Player p1) {
+        this.p1 = p1;
+    }
+    
+    public void setP2(Player p2) {
+        this.p2 = p2;
+    }
+    
+    public void setWinner(Player p) {
+        winner = p;
+    }
+    
+    public void setChild(Game child) {
+        if (topGame != null)
+            bottomGame = child;
+        else
+            topGame = child;
     }
 }

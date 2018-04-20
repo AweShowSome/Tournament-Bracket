@@ -2,6 +2,12 @@ package application;
 
 import java.util.ArrayList;
 
+/**
+ * Test class for debugging purposes
+ * 
+ * @author andreweng
+ *
+ */
 public class TestMain {
     
     public static void main(String[] args) {
@@ -50,29 +56,6 @@ public class TestMain {
         b.generateBracket();
         
         b.getGameStatuses();
-        
-        // for (int i = b.rounds.size() - 1; i >= 0; i--) {
-        // for (int j = 0; j < b.rounds.get(i).size(); j++) {
-        // System.out.println(b.rounds.get(i).get(j));
-        // }
-        // }
-        
-        // for (int j = 0; j < 2; j++) {
-        // int index = 1 - j;
-        // System.out.println("First step: " + index);
-        // index -= j;
-        // System.out.println("Second step: " + index);
-        // index = Math.abs(index);
-        // System.out.println("Third step: " + index);
-        // index = 2 - index;
-        // System.out.println("Fourth step: " + index);
-        // index /= 2;
-        // System.out.println("Fifth step: " + index + "\n");
-        // int i = (2 - Math.abs(1 - 2 * j)) / 2;
-        // System.out.println(i);
-        // }
-        
-        // rounds.get(i).get((rounds.get(i).size() - Math.abs((rounds.get(i).size() - 1 - j) - j) - 1)/2)
         
     }
     

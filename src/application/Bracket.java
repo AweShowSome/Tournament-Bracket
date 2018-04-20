@@ -5,21 +5,35 @@ import java.util.List;
 
 public class Bracket {
     
-    ArrayList<Player> players;
-    ArrayList<ArrayList<Game>> rounds;
+    ArrayList<Player> players; // List of players in the tournament
+    ArrayList<ArrayList<Game>> rounds; // List of games broken down by rounds they're in
     
     public Bracket() {
         players = new ArrayList<Player>();
         rounds = new ArrayList<ArrayList<Game>>();
     }
     
+    /**
+     * Parse's the data fed in either by hand or by file
+     * Players are seeded by order of appearance in list
+     * 
+     * @param teams
+     */
     public void parse(List<String> teams) {
+        // Assuming no nonsense lines, create a new player for each line
+        // Players are seeded by their order
         for (int i = 0; i < teams.size(); i++) {
             players.add(new Player(teams.get(i), i));
         }
     }
     
+    /**
+     * Creates a bracket based on the number of players in the tournament
+     * Accommodates for any number of players > 1
+     * Links all games together to the games they should be linked to
+     */
     public void generateBracket() {
+        // TODO: Generate basic graphics for the bracket
         
         // Makes players.size() a power of two
         // Handles Byes
@@ -34,11 +48,11 @@ public class Bracket {
         // Ex: i = 0, 1 game is added,
         // i = 1, 2 games are added,
         // i = 2, 4 games are added, etc.
+        int parentGame = 0;
         for (int i = 0; i < rounds.size(); i++) {
-            int games = (int) Math.pow(2, i);
+            int games = (int) Math.pow(2, i); // Number of games to exist in this round
             for (int j = 0; j < games; j++) {
-                int parentGame = 0;
-                if (i != 0)
+                if (i != 0) // If not GF, we can set a game's "parent game"
                     parentGame = ((games - Math.abs(games - 1 - (2 * j))) / 2);
                 // System.out.println(parentGame);
                 
@@ -61,16 +75,28 @@ public class Bracket {
         }
     }
     
-    public void getGameStatuses() {
+    /**
+     * Basic toString for debugging purposes. Gets the status of each game
+     * Works if generateBracket has been ran
+     */
+    public void getGameStatuses() { // Doesn't work with only 1 team
         System.out.println(gameTraversal(rounds.get(0).get(0)));
     }
     
+    /**
+     * Private recursive method for toString method to work
+     * 
+     * @param g
+     *            The current game
+     * @return
+     *         Each game's toString in LRO Order
+     */
     private String gameTraversal(Game g) {
         if (g == null)
             return "";
         String s = "";
-        s += gameTraversal(g.topGame);
-        s += gameTraversal(g.bottomGame);
+        s += gameTraversal(g.getTop());
+        s += gameTraversal(g.getBottom());
         s += g.toString() + "\n";
         
         return s;
