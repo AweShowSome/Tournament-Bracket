@@ -1,12 +1,27 @@
 package application;
 
+/**
+ * An individual game in the bracket
+ * 
+ * @author andreweng
+ *
+ */
 public class Game {
     
     // Round names for single elimination
-    private static String[] rounds = { "Grand Finals", "Winner's Semi's", "Winner's Quarters", "Winner's Eighths", "Top 32", "Top 64", "Top 128" };
+    private static String[] roundsSingleElim = { "Finals", "Semi-Finals", "Top 8", "Top 16", "Top 32", "Top 64", "Top 128" };
+    // Round names for double elimination (In case we really want to)
+    private static String[] roundsDoubleElim = {
+            "Grand Finals", "Loser's Finals", "Loser's Semis",
+            "Winner's Finals", "Loser's Quarters", "Loser's Eigths",
+            "Winner's Semi's", "Loser's Top 12", "Loser's Top 16",
+            "Winner's Quarters", "Loser's Top 24", "Loser's Top 32",
+            "Top 32", "Loser's Top 48", "Loser's Top 64",
+            "Top 64", "Loser's Top 96", "Loser's Top 128",
+            "Top 128" };
     private Player p1, p2; // players 1 and 2 respectively
     public int s1, s2; // Scores for player1 & player2 respectively
-    private final int round; // Round Game is part of (Corralates with array index its in)
+    private final int round; // Round Game is part of (Correlates with array index its in)
     public Player winner; // Winner of the match
     private Game topGame, bottomGame, parentGame; // Gets relative location
     
@@ -41,7 +56,7 @@ public class Game {
      */
     @Override
     public String toString() {
-        String s = rounds[round] + ":\n";
+        String s = roundsSingleElim[round] + ":\n";
         if (p1 != null && p2 != null) {
             s += p1.name + " vs " + p2.name;
             s += "\nScore: " + s1 + " : " + s2;

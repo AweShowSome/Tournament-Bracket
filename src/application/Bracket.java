@@ -3,6 +3,12 @@ package application;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Bracket that holds the entire tournament
+ * 
+ * @author andreweng
+ *
+ */
 public class Bracket {
     
     ArrayList<Player> players; // List of players in the tournament
@@ -20,6 +26,10 @@ public class Bracket {
      * @param teams
      */
     public void parse(List<String> teams) {
+        // Don't want any input we can't work with
+        if (teams == null || teams.size() <= 1)
+            throw new IllegalArgumentException();
+            
         // Assuming no nonsense lines, create a new player for each line
         // Players are seeded by their order
         for (int i = 0; i < teams.size(); i++) {

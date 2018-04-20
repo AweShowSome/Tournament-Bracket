@@ -78,6 +78,7 @@ public class Main extends Application {
                     act.add(team);
             }
             br.parse(act);
+            br.generateBracket();
         }
         catch (IOException e) {
             // TODO Auto-generated catch block

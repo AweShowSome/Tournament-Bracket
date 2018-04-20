@@ -1,5 +1,11 @@
 package application;
 
+/**
+ * A player in the tourney
+ * 
+ * @author andreweng
+ *
+ */
 public class Player implements Comparable<Player> {
     String name;
     int seed;
