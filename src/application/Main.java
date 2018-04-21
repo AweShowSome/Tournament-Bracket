@@ -33,12 +33,15 @@ public class Main extends Application {
 		}
 		//first inner most pane
 		panels.add(new BorderPane());
+		panels.get(0).setStyle("-fx-background-color: linear-gradient(from 0% 15% to 0% 105%, #FFFFFF, #c0c0c0, #ffd700)");
+		
 		//adds inner panels to all panels equal to the number of rounds and adds the panels to the array list
 		for( int i = 0; i < numberOfRounds - 1; i++) {
 
 			BorderPane innerPane = new BorderPane();
 			panels.add(innerPane);
 			panels.get(i).setCenter(innerPane);
+			
 
 		}
 		//making Vertical boxes for each left side and right side of each panel.
@@ -53,7 +56,7 @@ public class Main extends Application {
 		//BorderPane root = new BorderPane();
 		//		            root.setPadding(new Insets(20, 20, 20, 20));
 		Scene scene = new Scene(panels.get(0), 1080, 720);
-		panels.get(0).setStyle("-fx-background-color: linear-gradient(from 0% 15% to 0% 105%, #FFFFFF, #c0c0c0, #ffd700)");
+		//panels.get(0).setStyle("-fx-background-color: linear-gradient(from 0% 15% to 0% 105%, #FFFFFF, #c0c0c0, #ffd700)");
 		//            scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 		//            
 		//            Label Title = new Label("Tourney Generator 0.1ß");
@@ -90,7 +93,7 @@ public class Main extends Application {
 		//             Sets initial window
 		primaryStage.setScene(scene);
 		//            primaryStage.setTitle("Tourney Generator 0.1ß");
-		//            primaryStage.show();
+		            primaryStage.show();
 		//        }
 		//        catch (Exception e) {
 		//            e.printStackTrace();
