@@ -49,9 +49,9 @@ public class Main extends Application {
 			panels.get(i).setRight(rightVBox);
 		}
 //		primaryStage.show();
-	}
+//	}
 	            BorderPane root = new BorderPane();
-	//            root.setPadding(new Insets(20, 20, 20, 20));
+	            root.setPadding(new Insets(20, 20, 20, 20));
 	            Scene scene = new Scene(root, 1080, 720);
 	//            root.setStyle("-fx-background-color: linear-gradient(from 0% 15% to 0% 105%, #FFFFFF, #c0c0c0, #ffd700)");
 	//            scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
@@ -96,6 +96,7 @@ public class Main extends Application {
 	//            e.printStackTrace();
 	//        }
 	//    }
+	}
 
 	public static void main(String[] args) {
 //		try {
