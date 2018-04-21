@@ -11,6 +11,8 @@ public class Game {
     // Round names for single elimination
     private static String[] roundsSingleElim = { "Finals", "Semi-Finals", "Top 8", "Top 16", "Top 32", "Top 64", "Top 128" };
     // Round names for double elimination (In case we really want to)
+   
+    // TODO: ^ i don't think we need to. Debra absolutely didnt want extra stuff coz she cant test it and it messes with her tests
     private static String[] roundsDoubleElim = {
             "Grand Finals", "Loser's Finals", "Loser's Semis",
             "Winner's Finals", "Loser's Quarters", "Loser's Eigths",
@@ -23,6 +25,7 @@ public class Game {
     public int s1, s2; // Scores for player1 & player2 respectively
     private final int round; // Round Game is part of (Correlates with array index its in)
     public Player winner; // Winner of the match
+    //TODO we dont need this either
     private Game topGame, bottomGame, parentGame; // Gets relative location
     
     public Game(int round, Game parentGame) {

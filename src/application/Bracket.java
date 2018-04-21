@@ -27,9 +27,10 @@ public class Bracket {
      */
     public void parse(List<String> teams) {
         // Don't want any input we can't work with
-        if (teams == null || teams.size() <= 1)
+        if (teams == null || teams.size() < 1)
             throw new IllegalArgumentException();
-            
+         //TODO i changed the condition of the above if statement because it is okay if we have a single player. we just declare it as the winner.
+       
         // Assuming no nonsense lines, create a new player for each line
         // Players are seeded by their order
         for (int i = 0; i < teams.size(); i++) {
@@ -43,7 +44,8 @@ public class Bracket {
      * Links all games together to the games they should be linked to
      */
     public void generateBracket() {
-        // TODO: Generate basic graphics for the bracket
+        // TODO: Generate basic graphics for the bracket  - we should ddo this in tournament.class
+    	
         
         // Makes players.size() a power of two
         // Handles Byes
