@@ -48,11 +48,11 @@ public class Main extends Application {
 			panels.get(i).setLeft(leftVBox);
 			panels.get(i).setRight(rightVBox);
 		}
-		//primaryStage.show();
+//		primaryStage.show();
 	}
-	//            BorderPane root = new BorderPane();
+	            BorderPane root = new BorderPane();
 	//            root.setPadding(new Insets(20, 20, 20, 20));
-	//            Scene scene = new Scene(root, 1080, 720);
+	            Scene scene = new Scene(root, 1080, 720);
 	//            root.setStyle("-fx-background-color: linear-gradient(from 0% 15% to 0% 105%, #FFFFFF, #c0c0c0, #ffd700)");
 	//            scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 	//            
@@ -88,7 +88,7 @@ public class Main extends Application {
 	//             root.setCenter(hbox);
 	//             BorderPane.setAlignment(hbox, Pos.CENTER);
 	//             Sets initial window
-	//            primaryStage.setScene(scene);
+	            primaryStage.setScene(scene);
 	//            primaryStage.setTitle("Tourney Generator 0.1ß");
 	//            primaryStage.show();
 	//        }
@@ -98,20 +98,20 @@ public class Main extends Application {
 	//    }
 
 	public static void main(String[] args) {
-		try {
-			List<String> teams = Files.readAllLines(Paths.get(args[0]));
-			List<String> act = new ArrayList<String>();
-			for (String team : teams) {
-				if (!team.trim().isEmpty())
-					act.add(team);
-			}
-			br.parse(act);
-			br.generateBracket();
-		}
-		catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+//		try {
+//			List<String> teams = Files.readAllLines(Paths.get(args[0]));
+//			List<String> act = new ArrayList<String>();
+//			for (String team : teams) {
+//				if (!team.trim().isEmpty())
+//					act.add(team);
+//			}
+//			br.parse(act);
+//			br.generateBracket();
+//		}
+//		catch (IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
 		launch(args);
 	}
 }
