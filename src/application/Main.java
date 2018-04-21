@@ -49,7 +49,7 @@ public class Main extends Application {
 			panels.get(i).setRight(rightVBox);
 		}
 //		primaryStage.show();
-	}
+	//}
 	            BorderPane root = new BorderPane();
 	//            root.setPadding(new Insets(20, 20, 20, 20));
 	            Scene scene = new Scene(root, 1080, 720);
@@ -96,7 +96,7 @@ public class Main extends Application {
 	//            e.printStackTrace();
 	//        }
 	//    }
-
+	}
 	public static void main(String[] args) {
 //		try {
 //			List<String> teams = Files.readAllLines(Paths.get(args[0]));
