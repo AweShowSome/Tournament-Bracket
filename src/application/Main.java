@@ -15,7 +15,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
-public class Tournament extends Application {
+public class Main extends Application {
     
     public static Bracket br = new Bracket();
     
