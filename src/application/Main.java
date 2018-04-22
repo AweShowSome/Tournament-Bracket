@@ -11,7 +11,10 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
@@ -31,32 +34,64 @@ public class Main extends Application {
 			numberOfTeams /= 2;
 			numberOfRounds++;
 		}
-		//first inner most pane
-		panels.add(new BorderPane());
-		panels.get(0).setStyle("-fx-background-color: linear-gradient(from 0% 15% to 0% 105%, #FFFFFF, #c0c0c0, #ffd700)");
-		
-		//adds inner panels to all panels equal to the number of rounds and adds the panels to the array list
-		for( int i = 0; i < numberOfRounds - 1; i++) {
+		/////////////////////
+		//TODO testing value - 4
+		numberOfTeams = 32;
+		numberOfRounds  = 4;
+		////////////////////
 
+		//first border pane to avoid the null pointer exception and also that every tournament will have at least one panel.
+		panels.add(new BorderPane());
+
+		//setting background color
+		panels.get(0).setStyle("-fx-background-color: linear-gradient(from 0% 15% to 0% 105%, #FFFFFF, #c0c0c0, #ffd700)");
+		Label title = new Label("Tournement Generator");
+		title.setFont(new Font("Comic Sans MS Bold", 72.0));
+		panels.get(0).setTop(title);
+
+		//adds inner panels to all panels equal to the number of rounds and adds the panels to the array list
+		// the center part of the inner most panel will be reserved for the final game info
+		for( int i = 0; i < numberOfRounds - 1; i++) {
 			BorderPane innerPane = new BorderPane();
 			panels.add(innerPane);
 			panels.get(i).setCenter(innerPane);
-			
 
+			GridPane leftBox = new GridPane(), rightBox = new GridPane();
+			for (int j = 0; j < numberOfTeams/ Math.pow(2, i+1); j+=2) {
+				leftBox.add(new Label("Team A - " + j), 0, j);
+				leftBox.add(new TextField(), 1, j);
+				leftBox.add(new Label("Team B - " + j), 0, j+1);
+				leftBox.add(new TextField(), 1, j+1);
+				rightBox.add(new Label("Team A - " + j), 0, j);
+				rightBox.add(new TextField(), 1, j);
+				rightBox.add(new Label("Team B - " + j), 0, j+1);
+				rightBox.add(new TextField(), 1, j+1);
+
+			}
+			((BorderPane)panels.get(i).getCenter()).setLeft(leftBox);
+			((BorderPane)panels.get(i).getCenter()).setRight(rightBox);
 		}
+		GridPane center = new GridPane();
+		center.add(new Label("Team A - " + 0), 0, 0);
+		center.add(new TextField(), 1, 0);
+		center.add(new Label("Team B"), 0, 1);
+		center.add(new TextField(), 1, 1);
+		panels.get(panels.size()-1).setCenter(center);
+
+
 		//making Vertical boxes for each left side and right side of each panel.
-		for (int i = 0; i < numberOfRounds; i++) {
-			VBox leftVBox = new VBox(), rightVBox = new VBox();
-			//TODO add text boxes and labels to all vBoxes according to the number of games to be played in that round.
-			panels.get(i).setLeft(leftVBox);
-			panels.get(i).setRight(rightVBox);
-		}
-		//		primaryStage.show();
+		//		for (int i = 0; i < numberOfRounds; i++) {
+		//			
+		//			//TODO add text boxes and labels to all vBoxes according to the number of games to be played in that round.
+		//			panels.get(i).setLeft(leftVBox);
+		//			panels.get(i).setRight(rightVBox);
 		//}
+		//		primaryStage.show();
+		//		}
 		//BorderPane root = new BorderPane();
 		//		            root.setPadding(new Insets(20, 20, 20, 20));
-		Scene scene = new Scene(panels.get(0), 1080, 720);
-		//panels.get(0).setStyle("-fx-background-color: linear-gradient(from 0% 15% to 0% 105%, #FFFFFF, #c0c0c0, #ffd700)");
+		Scene scene = new Scene(panels.get(0), 1500, 1000);
+		//		panels.get(0).setStyle("-fx-background-color: linear-gradient(from 0% 15% to 0% 105%, #FFFFFF, #c0c0c0, #ffd700)");
 		//            scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 		//            
 		//            Label Title = new Label("Tourney Generator 0.1ß");
@@ -93,7 +128,7 @@ public class Main extends Application {
 		//             Sets initial window
 		primaryStage.setScene(scene);
 		//            primaryStage.setTitle("Tourney Generator 0.1ß");
-		            primaryStage.show();
+		primaryStage.show();
 		//        }
 		//        catch (Exception e) {
 		//            e.printStackTrace();
