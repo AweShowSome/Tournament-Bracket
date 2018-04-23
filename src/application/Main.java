@@ -27,9 +27,10 @@ public class Main extends Application {
 
 	@Override
 	public void start(Stage primaryStage) {
-		//		System.out.println(br.players.size());
+
 		//Arraylist to store the panel references
 		ArrayList<BorderPane> panels = new ArrayList<BorderPane>();
+
 		int numberOfRounds = br.rounds.size(), numberOfTeams = br.players.size();
 
 		//first border pane to avoid the null pointer exception and also that every tournament will have at least one panel.
@@ -37,7 +38,7 @@ public class Main extends Application {
 			panels.add(new BorderPane());
 		else {
 			//TODO deal with a single team situation
-			
+
 			System.out.println("singleplayer");
 			return;
 		}
@@ -49,36 +50,47 @@ public class Main extends Application {
 
 		//adds inner panels to all panels equal to the number of rounds and adds the panels to the array list
 		// the center part of the inner most panel will be reserved for the final game info
-//		System.out.println("Marker");
-		int i;
-		for(i = 0; i < numberOfRounds - 1; i++) {
+
+
+		for(int i = 0; i < numberOfRounds - 1; i++) {
 			BorderPane innerPane = new BorderPane();
 			panels.add(innerPane);
 			panels.get(i).setCenter(innerPane);
 
 			GridPane leftBox = new GridPane(), rightBox = new GridPane();
 			for (int j = 0; j < numberOfTeams/ Math.pow(2, i+1); j+=2) {
-				leftBox.add(new Label("Team A - " + j), 0, j);
-				leftBox.add(new TextField(), 1, j);
-				leftBox.add(new Label("Team B - " + j), 0, j+1);
-				leftBox.add(new TextField(), 1, j+1);
-				rightBox.add(new Label("Team A - " + j), 0, j);
-				rightBox.add(new TextField(), 1, j);
-				rightBox.add(new Label("Team B - " + j), 0, j+1);
-				rightBox.add(new TextField(), 1, j+1);
+				GridPane left = new GridPane();
+				
+				left.add(new Label("Team A - " + j), 0, j);
+				left.add(new TextField(), 1, j);
+				left.add(new Label("Team B - " + j), 0, j+1);
+				left.add(new TextField(), 1, j+1);
+				leftBox.add(left, 0, j);
+				leftBox.setVgap(20);
+				
+				GridPane right = new GridPane();
+				right.add(new Label("Team A - " + j), 0, j);
+				right.add(new TextField(), 1, j);
+				right.add(new Label("Team B - " + j), 0, j+1);
+				right.add(new TextField(), 1, j+1);
+				rightBox.setVgap(20);
+				rightBox.add(right, 0, j);
 
 			}
 			((BorderPane)panels.get(i).getCenter()).setLeft(leftBox);
 			((BorderPane)panels.get(i).getCenter()).setRight(rightBox);
 		}
-		
+
 		GridPane center = new GridPane();
 		center.add(new Label("Team A - " + 0), 0, 0);
 		center.add(new TextField(), 1, 0);
 		center.add(new Label("Team B"), 0, 1);
 		center.add(new TextField(), 1, 1);
 		panels.get(panels.size()-1).setCenter(center);
-
+		for(int i = br.rounds.size()-1; i >= 0 ; i--)
+			for (int j = 0; j < br.rounds.get(i).size(); j++) {
+				
+			}
 
 		Scene scene = new Scene(panels.get(0), 1500, 1000);
 		primaryStage.setScene(scene);
@@ -153,8 +165,8 @@ public class Main extends Application {
 
 			br.parse(act);
 			br.generateBracket();
-//			for( int i = 0; i < br.players.size(); i++)
-//				System.out.println(br.players.get(i).name);
+			//			for( int i = 0; i < br.players.size(); i++)
+			//				System.out.println(br.players.get(i).name);
 		}
 		catch (IOException e) {
 			// TODO Auto-generated catch block
