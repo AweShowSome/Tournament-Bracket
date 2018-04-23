@@ -11,7 +11,7 @@ public class Game {
     // Round names for single elimination
     private static String[] roundsSingleElim = { "Finals", "Semi-Finals", "Top 8", "Top 16", "Top 32", "Top 64", "Top 128" };
     // Round names for double elimination (In case we really want to)
-   
+    
     // TODO: ^ i don't think we need to. Debra absolutely didnt want extra stuff coz she cant test it and it messes with her tests
     private static String[] roundsDoubleElim = {
             "Grand Finals", "Loser's Finals", "Loser's Semis",
@@ -24,8 +24,10 @@ public class Game {
     private Player p1, p2; // players 1 and 2 respectively
     public int s1, s2; // Scores for player1 & player2 respectively
     private final int round; // Round Game is part of (Correlates with array index its in)
+    public static int roundCount = 0;
+    
     public Player winner; // Winner of the match
-    //TODO we dont need this either
+    // TODO we dont need this either
     private Game topGame, bottomGame, parentGame; // Gets relative location
     
     public Game(int round, Game parentGame) {
@@ -34,6 +36,8 @@ public class Game {
         s1 = 0;
         s2 = 0;
         this.round = round;
+        if (round > roundCount)
+            roundCount = round + 1;
         if (parentGame != null) { // Don't want null pointer exceptions
             this.parentGame = parentGame;
             parentGame.setChild(this);
@@ -46,6 +50,8 @@ public class Game {
         s1 = 0;
         s2 = 0;
         this.round = round;
+        if (round > roundCount)
+            roundCount = round + 1;
         if (parentGame != null) { // Don't want null pointer exceptions
             this.parentGame = parentGame;
             parentGame.setChild(this);
@@ -96,6 +102,18 @@ public class Game {
     
     public Game getParent() {
         return parentGame;
+    }
+    
+    public Player getP1() {
+        return p1;
+    }
+    
+    public Player getP2() {
+        return p2;
+    }
+    
+    public int getRound() {
+        return round;
     }
     
     public void setS1(int s1) {
