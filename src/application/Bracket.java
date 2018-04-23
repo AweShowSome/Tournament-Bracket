@@ -44,11 +44,7 @@ public class Bracket {
      * Links all games together to the games they should be linked to
      */
     public void generateBracket() {
-<<<<<<< HEAD
-        // TODO: Generate basic graphics for the bracket - we should do this in tournament.class
-=======
-        // TODO: Generate basic graphics for the bracket 
->>>>>>> 66d7f556a7a3c50103d0a44b73f5c6350d636d08
+
         
         // Makes players.size() a power of two
         // Handles Byes
