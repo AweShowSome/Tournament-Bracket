@@ -27,24 +27,20 @@ public class Main extends Application {
 
 	@Override
 	public void start(Stage primaryStage) {
+		//		System.out.println(br.players.size());
 		//Arraylist to store the panel references
 		ArrayList<BorderPane> panels = new ArrayList<BorderPane>();
-		int numberOfRounds = 0, numberOfTeams = br.players.size();
-
-		//calculating the number of rounds
-		while(numberOfTeams > 0) {
-			numberOfTeams /= 2;
-			numberOfRounds++;
-		}
-		/////////////////////
-		//TODO testing value - 4
-		numberOfTeams = 32;
-		numberOfRounds  = 4;
-		////////////////////
+		int numberOfRounds = br.rounds.size(), numberOfTeams = br.players.size();
 
 		//first border pane to avoid the null pointer exception and also that every tournament will have at least one panel.
-		panels.add(new BorderPane());
-
+		if(br.players.size()>1)
+			panels.add(new BorderPane());
+		else {
+			//TODO deal with a single team situation
+			
+			System.out.println("singleplayer");
+			return;
+		}
 		//setting background color
 		panels.get(0).setStyle("-fx-background-color: linear-gradient(from 0% 15% to 0% 105%, #FFFFFF, #c0c0c0, #ffd700)");
 		Label title = new Label("Tournement Generator");
@@ -53,7 +49,9 @@ public class Main extends Application {
 
 		//adds inner panels to all panels equal to the number of rounds and adds the panels to the array list
 		// the center part of the inner most panel will be reserved for the final game info
-		for( int i = 0; i < numberOfRounds - 1; i++) {
+//		System.out.println("Marker");
+		int i;
+		for(i = 0; i < numberOfRounds - 1; i++) {
 			BorderPane innerPane = new BorderPane();
 			panels.add(innerPane);
 			panels.get(i).setCenter(innerPane);
@@ -73,6 +71,7 @@ public class Main extends Application {
 			((BorderPane)panels.get(i).getCenter()).setLeft(leftBox);
 			((BorderPane)panels.get(i).getCenter()).setRight(rightBox);
 		}
+		
 		GridPane center = new GridPane();
 		center.add(new Label("Team A - " + 0), 0, 0);
 		center.add(new TextField(), 1, 0);
@@ -143,25 +142,26 @@ public class Main extends Application {
 		try
 		{
 			Scanner scnr = new Scanner(dataFile);
-		System.out.println(scnr.nextLine());
-		} catch ( Exception e) {
+			//List<String> teams = Files.readAllLines(Paths.get(args[0]));
+			List<String> act = new ArrayList<String>();
 
+			while(scnr.hasNextLine()) {
+				act.add(scnr.nextLine());
+			}
+
+
+
+			br.parse(act);
+			br.generateBracket();
+//			for( int i = 0; i < br.players.size(); i++)
+//				System.out.println(br.players.get(i).name);
+		}
+		catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		launch(args);
 	}
-	//	try {
-	//			List<String> teams = Files.readAllLines(Paths.get(args[0]));
-	//			List<String> act = new ArrayList<String>();
-	//			for (String team : teams) {
-	//				if (!team.trim().isEmpty())
-	//					act.add(team);
-	//			}
-	//			br.parse(act);
-	//			br.generateBracket();
-	//		}
-	//		catch (IOException e) {
-	//			// TODO Auto-generated catch block
-	//			e.printStackTrace();
-	//		}
+
 }
 
