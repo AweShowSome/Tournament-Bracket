@@ -24,7 +24,7 @@ public class Game {
     // Round names for single elimination
     private static String[] roundsSingleElim = { "Finals", "Semi-Finals", "Top 8", "Top 16", "Top 32", "Top 64", "Top 128" };
     private Player p1, p2; // players 1 and 2 respectively
-    public int score1, s2; // Scores for player1 & player2 respectively
+    public int s1, s2; // Scores for player1 & player2 respectively
     private final int round, gameNum; // Round Game is part of (Correlates with array index its in)
     public static int roundCount = 0;
     public GameUI gameBox;
@@ -35,7 +35,7 @@ public class Game {
     public Game(int round, int gameNum, Game parentGame) {
         p1 = null;
         p2 = null;
-        score1 = 0;
+        s1 = 0;
         s2 = 0;
         this.round = round;
         this.gameNum = gameNum;
@@ -50,7 +50,7 @@ public class Game {
     public Game(Player p1, Player p2, int round, int gameNum, Game parentGame) {
         this.p1 = p1;
         this.p2 = p2;
-        score1 = 0;
+        s1 = 0;
         s2 = 0;
         this.round = round;
         this.gameNum = gameNum;
@@ -234,7 +234,7 @@ public class Game {
         String s = roundsSingleElim[round] + ":\n";
         if (p1 != null && p2 != null) {
             s += p1.name + " vs " + p2.name;
-            s += "\nScore: " + score1 + " : " + s2;
+            s += "\nScore: " + s1 + " : " + s2;
             if (winner != null)
                 s += "Winner: " + winner.name;
         }
@@ -287,7 +287,7 @@ public class Game {
     }
     
     public void setS1(int s1) {
-        this.score1 = s1;
+        this.s1 = s1;
     }
     
     public void setS2(int s2) {
