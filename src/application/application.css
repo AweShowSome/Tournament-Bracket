@@ -1,6 +1,7 @@
 /* JavaFX CSS - Leave this comment until you have at least create one rule which uses -fx-Property */
-#bevel-grey {
-    -fx-background-color: 
+/* Class or Type */
+.button{
+	-fx-background-color: 
         linear-gradient(#f2f2f2, #d6d6d6),
         linear-gradient(#fcfcfc 0%, #d9d9d9 20%, #d6d6d6 100%),
         linear-gradient(#dddddd 0%, #f6f6f6 50%);
@@ -9,11 +10,30 @@
     -fx-text-fill: black;
     -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 5, 0.0 , 0 , 1 );
 }
-
-#bevel-grey:hover{
+.button:hover{
     -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 5, 0.5 , 0 , 0 );
 }
-
-#bevel-grey:pressed{
+.button:pressed{
     -fx-effect: innershadow( three-pass-box , rgba(0,0,0,0.6) , 2, 0.5 , 1 , 1 );
+}
+
+.menu-button > .arrow-button {
+    -fx-padding: 0;
+}
+
+.menu-button > .arrow-button > .arrow {
+    -fx-padding: 0;
+}
+
+/* IDs */
+
+#namebox{
+	-fx-background-color: 
+        linear-gradient(#f2f2f2, #d6d6d6),
+        linear-gradient(#fcfcfc 0%, #d9d9d9 20%, #d6d6d6 100%),
+        linear-gradient(#dddddd 0%, #f6f6f6 50%);
+    -fx-background-insets: 0, 1, 2;
+}
+#matchbox{
+	-fx-background-color: grey 
 }
