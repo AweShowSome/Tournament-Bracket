@@ -1,10 +1,16 @@
 package application;
 
 import java.util.ArrayList;
+import java.util.Optional;
 
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.geometry.Side;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
@@ -12,6 +18,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.TextAlignment;
+import javafx.stage.Modality;
+import javafx.stage.StageStyle;
 
 /**
  * An individual game in the bracket
@@ -209,9 +217,65 @@ public class Game {
             preWin = new MenuItem("Select Winner");
             postWin = new MenuItem("Modify Game Results");
             
+            preWin.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent e) {
+                    Alert winWindow = new Alert(AlertType.NONE);
+                    winWindow.initStyle(StageStyle.UTILITY);
+                    winWindow.initModality(Modality.APPLICATION_MODAL);
+                    winWindow.setContentText("Choose a Winner:");
+                    
+                    ButtonType selectP1 = new ButtonType(p1.name);
+                    ButtonType selectP2 = new ButtonType(p2.name);
+                    ButtonType cancel = new ButtonType("Cancel");
+                    winWindow.getButtonTypes().setAll(selectP1, selectP2, cancel);
+                    
+                    Optional<ButtonType> result = winWindow.showAndWait();
+                    if (result.get() == selectP1)
+                        setWinner(p1);
+                    else if (result.get() == selectP2)
+                        setWinner(p2);
+                    else {
+                        winWindow.close();
+                        return;
+                    }
+                    preWin.setVisible(false);
+                    postWin.setVisible(true);
+                    score1.setEditable(false);
+                    score2.setEditable(false);
+                    winWindow.close();
+                }
+            });
+            
+            postWin.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent e) {
+                    Alert modWin = new Alert(AlertType.NONE);
+                    modWin.initStyle(StageStyle.UTILITY);
+                    modWin.initModality(Modality.APPLICATION_MODAL);
+                    modWin.setContentText("Are you sure?");
+                    ButtonType yes = new ButtonType("Yes");
+                    ButtonType no = new ButtonType("No");
+                    modWin.getButtonTypes().setAll(yes, no);
+                    Optional<ButtonType> result = modWin.showAndWait();
+                    if (result.get() == yes) {
+                        preWin.setVisible(true);
+                        postWin.setVisible(false);
+                        score1.setEditable(true);
+                        score2.setEditable(true);
+                    }
+                    else {
+                        modWin.close();
+                        return;
+                    }
+                    modWin.close();
+                }
+            });
+            
             if (winner == null) { // For non byes
                 postWin.setVisible(false);
                 if (p1 == null || p2 == null)
+                    // Buttons will be reenabled when two players exist in the game
                     but.setDisable(true);
             }
             else // For byes
@@ -225,6 +289,14 @@ public class Game {
     }
     
     // - - - - - Helper Methods - - - - - \\
+    
+    private void checkNewGame() {
+        if (p1 != null && p2 != null && gameBox != null) {
+            gameBox.score1.setEditable(true);
+            gameBox.score2.setEditable(true);
+            gameBox.but.setDisable(false);
+        }
+    }
     
     /**
      * toString for debugging purposes
@@ -295,20 +367,55 @@ public class Game {
     }
     
     public void setP1(Player p1) {
+        if (this.p1 != null) {
+            if (this.p1 == winner) {
+                setWinner(null);
+            }
+            gameBox.score1.setText("");
+            gameBox.score2.setText("");
+            gameBox.score1.setEditable(false);
+            gameBox.score2.setEditable(false);
+            gameBox.preWin.setVisible(true);
+            gameBox.postWin.setVisible(false);
+            gameBox.but.setDisable(true);
+        }
         this.p1 = p1;
+        if (p1 != null)
+            gameBox.p1Name.setText(p1.name);
+        else
+            gameBox.p1Name.setText("Winner of " + (topGame.round + 1) + "." + (topGame.gameNum + 1));
+        checkNewGame();
     }
     
     public void setP2(Player p2) {
+        if (this.p2 != null) {
+            if (this.p2 == winner) {
+                setWinner(null);
+            }
+            gameBox.score1.setText("");
+            gameBox.score2.setText("");
+            gameBox.score1.setEditable(false);
+            gameBox.score2.setEditable(false);
+            gameBox.preWin.setVisible(true);
+            gameBox.postWin.setVisible(false);
+            gameBox.but.setDisable(true);
+        }
         this.p2 = p2;
+        if (p2 != null)
+            gameBox.p2Name.setText(p2.name);
+        else
+            gameBox.p2Name.setText("Winner of " + (bottomGame.round + 1) + "." + (bottomGame.gameNum + 1));
+        checkNewGame();
     }
     
     public void setWinner(Player p) {
         winner = p;
-        Game parent = getParent();
-        if (parent.getTop() == this)
-            parent.setP1(winner);
-        else
-            parent.setP2(winner);
+        if (parentGame != null) {
+            if (parentGame.topGame == this)
+                parentGame.setP1(winner);
+            else
+                parentGame.setP2(winner);
+        }
     }
     
     public void setChild(Game child) {
