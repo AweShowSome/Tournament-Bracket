@@ -72,12 +72,12 @@ public class Game {
     
     public void createUI(ArrayList<VBox> rounds) {
         // Recursively work bottom up to create the games
-        if (getTop() != null)
+        if (topGame != null)
             topGame.createUI(rounds);
-        if (getBottom() != null)
+        if (bottomGame != null)
             bottomGame.createUI(rounds);
         
-        if (getBottom() == null && getTop() == null) { // Last possible round; Only round for byes
+        if (bottomGame == null && topGame == null) { // Last possible round; Only round for byes
             if (p1 == null) {
                 setWinner(p2);
                 // return; // Doesn't create the game box
@@ -140,7 +140,7 @@ public class Game {
             if (p1 != null) // If player1 exists
                 p1Name = new Label(p1.name); // Display name
             else { // Else
-                if (getTop() != null) // If it has a child game
+                if (topGame != null) // If it has a child game
                     // Prepared for winner of that game
                     p1Name = new Label("Winner of " + (topGame.round + 1) + "." + (topGame.gameNum + 1));
                 else // Else it's a bye
@@ -338,34 +338,6 @@ public class Game {
         return bottomGame;
     }
     
-    public Game getParent() {
-        return parentGame;
-    }
-    
-    public Player getP1() {
-        return p1;
-    }
-    
-    public Player getP2() {
-        return p2;
-    }
-    
-    public int getRound() {
-        return round;
-    }
-    
-    public int getGameNum() {
-        return gameNum;
-    }
-    
-    public void setS1(int s1) {
-        this.s1 = s1;
-    }
-    
-    public void setS2(int s2) {
-        this.s2 = s2;
-    }
-    
     public void setP1(Player p1) {
         if (this.p1 != null) {
             if (this.p1 == winner) {
@@ -380,9 +352,9 @@ public class Game {
             gameBox.but.setDisable(true);
         }
         this.p1 = p1;
-        if (p1 != null)
+        if (p1 != null && gameBox != null)
             gameBox.p1Name.setText(p1.name);
-        else
+        else if (p1 == null)
             gameBox.p1Name.setText("Winner of " + (topGame.round + 1) + "." + (topGame.gameNum + 1));
         checkNewGame();
     }
@@ -401,9 +373,9 @@ public class Game {
             gameBox.but.setDisable(true);
         }
         this.p2 = p2;
-        if (p2 != null)
+        if (p2 != null && gameBox != null)
             gameBox.p2Name.setText(p2.name);
-        else
+        else if (p2 == null)
             gameBox.p2Name.setText("Winner of " + (bottomGame.round + 1) + "." + (bottomGame.gameNum + 1));
         checkNewGame();
     }
