@@ -80,11 +80,11 @@ public class Game {
         if (bottomGame == null && topGame == null) { // Last possible round; Only round for byes
             if (p1 == null) {
                 setWinner(p2);
-                // return; // Doesn't create the game box
+                return; // Doesn't create the game box
             }
             else if (p2 == null) {
                 setWinner(p1);
-                // return; // Doesn't create the game box
+                return; // Doesn't create the game box
             }
         }
         
@@ -100,14 +100,14 @@ public class Game {
      *
      */
     private class GameUI {
-        HBox options;
-        VBox match;
-        Label matchName;
-        MenuButton but;
-        MenuItem preWin, postWin;
-        HBox play1, play2;
-        Label p1Name, p2Name;
-        TextField score1, score2;
+        HBox options; // Holds the match name, the match, and the button to submit scores
+        VBox match; // Holds the players' data
+        Label matchName; // The Label for the match
+        MenuButton but; // The button selecting for options
+        MenuItem preWin, postWin; // Options the button has
+        HBox play1, play2; // Player 1 and 2's boxes for their name and scores
+        Label p1Name, p2Name; // p1 and p2's names respectively
+        TextField score1, score2; // p1 and p2's scores respectively
         
         public GameUI() {
             // Create Options Box
@@ -217,7 +217,10 @@ public class Game {
             preWin = new MenuItem("Select Winner");
             postWin = new MenuItem("Modify Game Results");
             
+            // Set action on mouse click/enter
             preWin.setOnAction(new EventHandler<ActionEvent>() {
+                // Creates an alert allowing the user to select a winner
+                // Bracket will update to reflect this
                 @Override
                 public void handle(ActionEvent e) {
                     Alert winWindow = new Alert(AlertType.NONE);
@@ -247,7 +250,10 @@ public class Game {
                 }
             });
             
+            // Set action on mouse click/enter
             postWin.setOnAction(new EventHandler<ActionEvent>() {
+                
+                // Allows for modification of prior games if necessary
                 @Override
                 public void handle(ActionEvent e) {
                     Alert modWin = new Alert(AlertType.NONE);
@@ -290,7 +296,11 @@ public class Game {
     
     // - - - - - Helper Methods - - - - - \\
     
+    /**
+     * Private helper method that checks if a game is eligible to be played
+     */
     private void checkNewGame() {
+        // If graphics have been loaded and neither player is null
         if (p1 != null && p2 != null && gameBox != null) {
             gameBox.score1.setEditable(true);
             gameBox.score2.setEditable(true);
@@ -330,19 +340,38 @@ public class Game {
     
     // - - - - - Getters & Setters - - - - - \\
     
+    /**
+     * Getter method to get the top child game
+     * 
+     * @return
+     *         The top (left) game
+     */
     public Game getTop() {
         return topGame;
     }
     
+    /**
+     * Getter method to get the bottom child game
+     * 
+     * @return
+     *         The bottom (right) game
+     */
     public Game getBottom() {
         return bottomGame;
     }
     
+    /**
+     * Sets player 1 and performs any updates for the newly set player
+     * 
+     * @param p1
+     *            The new player
+     */
     public void setP1(Player p1) {
-        if (this.p1 != null) {
-            if (this.p1 == winner) {
+        if (this.p1 != null) { // If replacing another player
+            if (this.p1 == winner) { // If match played and this player won
                 setWinner(null);
             }
+            // Reset match
             gameBox.score1.setText("");
             gameBox.score2.setText("");
             gameBox.score1.setEditable(false);
@@ -352,18 +381,25 @@ public class Game {
             gameBox.but.setDisable(true);
         }
         this.p1 = p1;
-        if (p1 != null && gameBox != null)
+        if (p1 != null && gameBox != null) // Label new playerin appropriate box
             gameBox.p1Name.setText(p1.name);
         else if (p1 == null)
             gameBox.p1Name.setText("Winner of " + (topGame.round + 1) + "." + (topGame.gameNum + 1));
         checkNewGame();
     }
     
+    /**
+     * Sets player 2 and performs any updates for the newly set player
+     * 
+     * @param p2
+     *            The new player
+     */
     public void setP2(Player p2) {
-        if (this.p2 != null) {
-            if (this.p2 == winner) {
+        if (this.p2 != null) { // If replacing another player
+            if (this.p2 == winner) { // If match played and this player won
                 setWinner(null);
             }
+            // Reset match
             gameBox.score1.setText("");
             gameBox.score2.setText("");
             gameBox.score1.setEditable(false);
@@ -373,13 +409,19 @@ public class Game {
             gameBox.but.setDisable(true);
         }
         this.p2 = p2;
-        if (p2 != null && gameBox != null)
+        if (p2 != null && gameBox != null) // Label new player in appropriate box
             gameBox.p2Name.setText(p2.name);
         else if (p2 == null)
             gameBox.p2Name.setText("Winner of " + (bottomGame.round + 1) + "." + (bottomGame.gameNum + 1));
         checkNewGame();
     }
     
+    /**
+     * Sets Winner of this game and updates any games after
+     * 
+     * @param p
+     *            The winner of this game
+     */
     public void setWinner(Player p) {
         winner = p;
         if (parentGame != null) {
@@ -390,10 +432,15 @@ public class Game {
         }
     }
     
+    /**
+     * Sets the child of this game during setup
+     * 
+     * @param child
+     */
     public void setChild(Game child) {
-        if (topGame != null)
-            bottomGame = child;
-        else
+        if (topGame == null)
             topGame = child;
+        else
+            bottomGame = child;
     }
 }
