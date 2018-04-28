@@ -121,6 +121,12 @@ public class Bracket {
         return s;
     }
     
+    /**
+     * Print out the results of the top 3 teams
+     * @param p1 Champion
+     * @param p2 2nd place
+     * @param p3 3rd place (optional)
+     */
     public static void setResults(Player p1, Player p2, Player p3) {
         String res = "First: " + p1.name + "\nSecond: " + p2.name;
         if (p3 != null)
@@ -129,6 +135,12 @@ public class Bracket {
         results.setVisible(true);
     }
     
+    /**
+     * Set up the UI
+     * 
+     * @author Andrew Eng
+     *
+     */
     class BracketUI {
         ScrollPane scroll;
         BorderPane root;
@@ -137,10 +149,13 @@ public class Bracket {
         VBox resultsBox;
         ArrayList<VBox> matchRounds;
         
+        /**
+         * Constructor
+         */
         public BracketUI() {
-            scroll = new ScrollPane();
+            scroll = new ScrollPane(); // allows scrolling for large number of teams
             
-            resultsBox = new VBox();
+            resultsBox = new VBox(); // places all content in a box
             
             root = new BorderPane();
             root.setPadding(new Insets(20, 20, 20, 20));
@@ -168,12 +183,14 @@ public class Bracket {
             for (int i = matchRounds.size() - 1; i >= 0; i--)
                 bracketBox.getChildren().add(matchRounds.get(i));
             
+            // The winner's label
             results = new Label("Ex Results Here");
             results.setFont(new Font("Helvetica Neue", 48.0));
             results.setAlignment(Pos.CENTER);
             results.setTextAlignment(TextAlignment.CENTER);
             results.setVisible(false);
             
+            // Placing all contents in the vBox
             resultsBox.getChildren().addAll(results, bracketBox);
             resultsBox.setAlignment(Pos.CENTER);
             root.setCenter(resultsBox);
