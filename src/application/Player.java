@@ -1,10 +1,18 @@
+///////////////////////////////////////////////////////////////////////////////
+//                   
+// Title:            X4- Tournament Bracket
+// Files:            Bracket.java, Game.java, Main.java, Player.java
+//
+// Semester:         Spring 2018
+//
+// Lecturer's Name:  Debra Deppeler CS400
+//
+////////////////////////////////////////////////////////////////////////////////
 package application;
 
 /**
  * A player in the tournament. the class holds all properties of a participating team in the tournament.
  * 
- * @author andreweng
- *
  */
 public class Player implements Comparable<Player> {
     String name;  //name of the team

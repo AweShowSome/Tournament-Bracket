@@ -1,9 +1,18 @@
+///////////////////////////////////////////////////////////////////////////////
+//                   
+// Title:            X4- Tournament Bracket
+// Files:            Bracket.java, Game.java, Main.java, Player.java
+//
+// Semester:         Spring 2018
+//
+// Lecturer's Name:  Debra Deppeler CS400
+//
+////////////////////////////////////////////////////////////////////////////////
 package application;
 
 import java.util.ArrayList;
 import java.util.Optional;
 import java.util.function.UnaryOperator;
-
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -26,10 +35,9 @@ import javafx.stage.StageStyle;
 import javafx.util.converter.IntegerStringConverter;
 
 /**
- * An individual game in the bracket
+ * An individual game in the bracket. 
+ * Each game has information about the teams that are in that game( player 1 and 2 )
  * 
- * @author andreweng
- *
  */
 public class Game {
     
