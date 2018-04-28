@@ -1,8 +1,18 @@
+///////////////////////////////////////////////////////////////////////////////
+//                   
+// Title:            X4- Tournament Bracket
+// Files:            Bracket.java, Game.java, Main.java, Player.java, application.css, teams.txt
+//
+// Semester:         Spring 2018
+//
+// Lecturer's Name:  Debra Deppeler CS400
+//
+////////////////////////////////////////////////////////////////////////////////
+
 package application;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
@@ -169,10 +179,9 @@ public class Bracket {
         ArrayList<VBox> matchRounds;
         
         public BracketUI() {
-            scroll = new ScrollPane();
-            
+          
+        	scroll = new ScrollPane();
             resultsBox = new VBox();
-            
             root = new BorderPane();
             root.setPadding(new Insets(20, 20, 20, 20));
             // setting background color

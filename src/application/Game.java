@@ -1,9 +1,18 @@
+///////////////////////////////////////////////////////////////////////////////
+//                   
+// Title:            X4- Tournament Bracket
+// Files:            Bracket.java, Game.java, Main.java, Player.java, application.css, teams.txt
+//
+// Semester:         Spring 2018
+//
+// Lecturer's Name:  Debra Deppeler CS400
+//
+////////////////////////////////////////////////////////////////////////////////
 package application;
 
 import java.util.ArrayList;
 import java.util.Optional;
 import java.util.function.UnaryOperator;
-
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -301,11 +310,13 @@ public class Game {
                 // Bracket will update to reflect this
                 @Override
                 public void handle(ActionEvent e) {
+                	// creates the alert window with certain properties
                     Alert winWindow = new Alert(AlertType.NONE);
                     winWindow.initStyle(StageStyle.UTILITY);
                     winWindow.initModality(Modality.APPLICATION_MODAL);
                     winWindow.setContentText("Choose a Winner:");
                     
+                    // buttons in the alert window
                     ButtonType selectP1 = new ButtonType(p1.name);
                     ButtonType selectP2 = new ButtonType(p2.name);
                     ButtonType cancel = new ButtonType("Cancel");
@@ -316,6 +327,7 @@ public class Game {
                     int s1 = 0;
                     int s2 = 0;
                     
+                    // checks to see if the user selection of winner matches with scores entered
                     if (!score1.getText().equals(""))
                         s1 = Integer.parseInt(score1.getText());
                     if (!score2.getText().equals(""))
@@ -342,6 +354,7 @@ public class Game {
                         }
                         setWinner(p1);
                     }
+                    // 2nd case warning message
                     else if (result.get() == selectP2) {
                         if (s1 >= s2) {
                             Alert warnWin = new Alert(AlertType.NONE);
@@ -558,6 +571,7 @@ public class Game {
      */
     public void setWinner(Player p) {
         winner = p;
+        // Update the parent game as long as it is not the championship game
         if (parentGame != null) {
             if (parentGame.topGame == this)
                 parentGame.setP1(winner);

@@ -1,3 +1,13 @@
+///////////////////////////////////////////////////////////////////////////////
+//                   
+// Title:            X4- Tournament Bracket
+// Files:            Bracket.java, Game.java, Main.java, Player.java, application.css, teams.txt
+//
+// Semester:         Spring 2018
+//
+// Lecturer's Name:  Debra Deppeler CS400
+//
+////////////////////////////////////////////////////////////////////////////////
 package application;
 
 import java.io.IOException;
@@ -31,6 +41,7 @@ public class Main extends Application {
     
     @Override
     public void start(Stage primaryStage) {
+    	
         primaryStage.setTitle("Tournement Generator");
         
         // Set Scene
@@ -57,6 +68,7 @@ public class Main extends Application {
             e.printStackTrace();
         }
         
+       //launching the applications
         launch(args);
     }
     
