@@ -21,11 +21,11 @@ import javafx.scene.text.TextAlignment;
  */
 public class Bracket {
     
-    ArrayList<Player> players; // List of players in the tournament
-    ArrayList<ArrayList<Game>> rounds; // List of games broken down by rounds they're in
-    BracketUI bracket;
+    private ArrayList<Player> players; // List of players in the tournament
+    private ArrayList<ArrayList<Game>> rounds; // List of games broken down by rounds they're in
+    public BracketUI bracket;
     public static Label results;
-    public static final int SCORE_SIZE = 35;
+    public static final int SCORE_SIZE = 35; // Gets width
     
     public Bracket() {
         players = new ArrayList<Player>();
@@ -52,8 +52,10 @@ public class Bracket {
      * Links all games together to the games they should be linked to
      */
     public void generateBracket() {
-        if (players.isEmpty() || players.size() == 1)
+        if (players.isEmpty() || players.size() == 1) {
+            bracket = new BracketUI();
             return; // Don't do anything if num of players == 0, 1
+        }
         // Makes players.size() a power of two
         // Handles Byes
         while ((Math.log(players.size()) / Math.log(2)) % 1 > 0)
@@ -153,7 +155,7 @@ public class Bracket {
             
             // Box to hold the bracket
             bracketBox = new HBox();
-            bracketBox.setPrefSize(1080, 720);
+            bracketBox.setPrefSize(1080, 520);
             
             matchRounds = new ArrayList<VBox>();
             for (int i = 0; i < rounds.size(); i++) { // Create a VBox for each round
@@ -167,10 +169,13 @@ public class Bracket {
                 bracketBox.getChildren().add(matchRounds.get(i));
             
             results = new Label("Ex Results Here");
+            results.setFont(new Font("Helvetica Neue", 48.0));
             results.setAlignment(Pos.CENTER);
+            results.setTextAlignment(TextAlignment.CENTER);
             results.setVisible(false);
             
             resultsBox.getChildren().addAll(results, bracketBox);
+            resultsBox.setAlignment(Pos.CENTER);
             root.setCenter(resultsBox);
             BorderPane.setAlignment(resultsBox, Pos.CENTER);
             
