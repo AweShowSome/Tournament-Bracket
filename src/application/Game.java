@@ -500,7 +500,7 @@ public class Game {
             gameBox.p2Name.setText(p2.name);
         else if (p2 == null) {
             gameBox.p2Name.setText("Winner of " + (bottomGame.round + 1) + "." + (bottomGame.gameNum + 1));
-            gameBox.p2Name.setText("");
+            // gameBox.p2Name.setText("");
         }
         checkNewGame();
     }
@@ -525,10 +525,10 @@ public class Game {
             second = (p == p1) ? p2 : p1;
             if (topGame != null && bottomGame != null) {
                 int s11, s12, s21, s22;
-                s11 = Integer.parseInt(topGame.gameBox.score1.getText());
-                s12 = Integer.parseInt(topGame.gameBox.score2.getText());
-                s21 = Integer.parseInt(bottomGame.gameBox.score1.getText());
-                s22 = Integer.parseInt(bottomGame.gameBox.score2.getText());
+                s11 = (!topGame.gameBox.score1.getText().equals("")) ? Integer.parseInt(topGame.gameBox.score1.getText()) : 0;
+                s12 = (!topGame.gameBox.score2.getText().equals("")) ? Integer.parseInt(topGame.gameBox.score2.getText()) : 0;
+                s21 = (!bottomGame.gameBox.score1.getText().equals("")) ? Integer.parseInt(bottomGame.gameBox.score1.getText()) : 0;
+                s22 = (!bottomGame.gameBox.score2.getText().equals("")) ? Integer.parseInt(bottomGame.gameBox.score2.getText()) : 0;
                 Player pot1, pot2;
                 if (s11 >= s12) {
                     pot1 = topGame.p2;
