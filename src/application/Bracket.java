@@ -1,7 +1,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 //                   
 // Title:            X4- Tournament Bracket
-// Files:            Bracket.java, Game.java, Main.java, Player.java
+// Files:            Bracket.java, Game.java, Main.java, Player.java, application.css, teams.txt
 //
 // Semester:         Spring 2018
 //
