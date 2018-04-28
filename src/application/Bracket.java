@@ -13,10 +13,24 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
 
+///////////////////////////////////////////////////////////////////////////////
+//
+//Title:            X4- Tournament Bracket
+//Files:            Bracket.java, Game.java, Main.java, Player.java, application.css, teams.txt
+//
+//Semester:         Spring 2018
+//
+//Lecturer's Name:  Debra Deppeler CS400
+//
+////////////////////////////////////////////////////////////////////////////////
+
 /**
  * Bracket that holds the entire tournament
+ * Bracket has information about all the games, rounds, players.
+ * This class also generates the UI and controls it.
  * 
- * @author andreweng
+ * Additionally, the application handles non 2^n number of teams by giving by's to teams
+ * 
  *
  */
 public class Bracket {
@@ -121,19 +135,36 @@ public class Bracket {
         return s;
     }
     
+    /**
+     * Static method to set results after tournament has finished
+     * 
+     * @param p1
+     *            First place
+     * @param p2
+     *            Second place
+     * @param p3
+     *            Third place
+     */
     public static void setResults(Player p1, Player p2, Player p3) {
         String res = "First: " + p1.name + "\nSecond: " + p2.name;
         if (p3 != null)
             res += "\nThird: " + p3.name;
-        results.setText(res);
-        results.setVisible(true);
+        results.setText(res); // Label was already set in place,
+        results.setVisible(true); // Just needed to make it visible
     }
     
+    /**
+     * Inner class for User Interface
+     * The box that holds the entire bracket
+     * 
+     * @author andreweng
+     *
+     */
     class BracketUI {
-        ScrollPane scroll;
+        ScrollPane scroll; // Allows the user to see more if things go off screen
         BorderPane root;
         Label title;
-        HBox bracketBox;
+        HBox bracketBox; // Holds all of the games
         VBox resultsBox;
         ArrayList<VBox> matchRounds;
         
