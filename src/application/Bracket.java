@@ -19,6 +19,8 @@ import javafx.scene.text.TextAlignment;
 //
 //Semester:         Spring 2018
 //
+//Authors:			Andrew Eng, Nimish Upadhyay, Akshat Raika, Saksham Badyal
+//
 //Lecturer's Name:  Debra Deppeler CS400
 //
 ////////////////////////////////////////////////////////////////////////////////
