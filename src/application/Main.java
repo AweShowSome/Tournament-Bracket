@@ -1,13 +1,3 @@
-///////////////////////////////////////////////////////////////////////////////
-//                   
-// Title:            X4- Tournament Bracket
-// Files:            Bracket.java, Game.java, Main.java, Player.java, application.css, teams.txt
-//
-// Semester:         Spring 2018
-//
-// Lecturer's Name:  Debra Deppeler CS400
-//
-////////////////////////////////////////////////////////////////////////////////
 package application;
 
 import java.io.IOException;
@@ -20,6 +10,21 @@ import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+///////////////////////////////////////////////////////////////////////////////
+//
+//Title:            X4- Tournament Bracket
+//Files:            Bracket.java, Game.java, Main.java, Player.java, application.css, teams.txt
+//
+//Semester:         Spring 2018
+//
+//Lecturer's Name:  Debra Deppeler CS400
+//
+////////////////////////////////////////////////////////////////////////////////
+
+/**
+ * Runner of the program
+ * 
+ */
 public class Main extends Application {
     
     public static Bracket br = new Bracket();
@@ -38,13 +43,12 @@ public class Main extends Application {
     }
     
     public static void main(String[] args) {
-        List<String> players;	//list of all teams participating in the tournament.
-        
-        //reading the file to get all teams
+        List<String> players;
+        // reading the files to get all teams
         try {
             players = Files.readAllLines(Paths.get(args[0]));
             List<String> act = new ArrayList<String>();
-            for (String team : players) {
+            for (String team : players) { // Remove all unnecessary lines
                 if (!team.trim().isEmpty())
                     act.add(team);
             }

@@ -1,13 +1,3 @@
-///////////////////////////////////////////////////////////////////////////////
-//                   
-// Title:            X4- Tournament Bracket
-// Files:            Bracket.java, Game.java, Main.java, Player.java, application.css, teams.txt
-//
-// Semester:         Spring 2018
-//
-// Lecturer's Name:  Debra Deppeler CS400
-//
-////////////////////////////////////////////////////////////////////////////////
 package application;
 
 import java.util.ArrayList;
@@ -34,10 +24,22 @@ import javafx.stage.Modality;
 import javafx.stage.StageStyle;
 import javafx.util.converter.IntegerStringConverter;
 
+///////////////////////////////////////////////////////////////////////////////
+//
+//Title:            X4- Tournament Bracket
+//Files:            Bracket.java, Game.java, Main.java, Player.java, application.css, teams.txt
+//
+//Semester:         Spring 2018
+//
+//Lecturer's Name:  Debra Deppeler CS400
+//
+////////////////////////////////////////////////////////////////////////////////
+
 /**
- * An individual game in the bracket. 
- * Each game has information about the teams that are in that game( player 1 and 2 )
+ * An individual game in the bracket
+ * Each game has information about the teams that are in that game, player 1 and 2
  * 
+ *
  */
 public class Game {
     
@@ -50,12 +52,17 @@ public class Game {
     
     public Player winner; // Winner of the match
     private Game topGame, bottomGame, parentGame; // Gets relative location
+    private static final boolean WINNER_NOTE = false; // Tells us whether to say what match a player is coming from
     
     /**
      * Constructor for a game object
-     * @param round - round number that the game is on
-     * @param gameNum - what game number of this round
-     * @param parentGame - the next game that tree
+     * 
+     * @param round
+     *            Round number the game's on
+     * @param gameNum
+     *            Identifier for the game in that round
+     * @param parentGame
+     *            A previously constructed game that this game will "feed" into
      */
     public Game(int round, int gameNum, Game parentGame) {
         p1 = null;
@@ -71,12 +78,18 @@ public class Game {
     }
     
     /**
+     * Constructor for a game object
      * 
-     * @param p1 - first team
-     * @param p2 - second team
-     * @param round - round number that the game is on
-     * @param gameNum - what game number of this round
-     * @param parentGame - the next game that tree
+     * @param p1
+     *            The first team
+     * @param p2
+     *            The second team
+     * @param round
+     *            Round number the game's on
+     * @param gameNum
+     *            Identifier for the game in that round
+     * @param parentGame
+     *            A previously constructed game that this game will "feed" into
      */
     public Game(Player p1, Player p2, int round, int gameNum, Game parentGame) {
         this.p1 = p1;
@@ -92,28 +105,28 @@ public class Game {
     }
     
     /**
-     * Creates the bracket view
+     * Recursive method that
+     * Creates the UI for each game
+     * Together, it creates the entire bracket
+     * 
      * @param rounds
+     *            The arrayList to store each game
      */
     public void createUI(ArrayList<VBox> rounds) {
-        // Recursively work bottom up to create the games
+        // Recursively work bottom up (left right) to create the games
         if (topGame != null)
             topGame.createUI(rounds);
         if (bottomGame != null)
             bottomGame.createUI(rounds);
         
         if (bottomGame == null && topGame == null) { // Last possible round; Only round for byes
-            if (p1 == null) {
-                setWinner(p2);
-                // return; // Doesn't create the game box
-            }
-            else if (p2 == null) {
+            if (p2 == null) { // Only possible option. p1 will always be filled
                 setWinner(p1);
                 // return; // Doesn't create the game box
             }
         }
         
-        gameBox = new GameUI();
+        gameBox = new GameUI(); // Create UI for that game
         // Add game to the rounds
         rounds.get(round).getChildren().add(gameBox.options);
     }
@@ -155,7 +168,6 @@ public class Game {
             
             // Create Match Box
             match = new VBox();
-            // Settings
             
             // Create Player Boxes
             play1 = new HBox();
@@ -164,14 +176,11 @@ public class Game {
             // Set display for p1's Name box
             if (p1 != null) // If player1 exists
                 p1Name = new Label(p1.name); // Display name
-            else { // Else
-                if (topGame != null) { // If it has a child game
-                    // Prepared for winner of that game
+            else { // Else prepare for winner of top child game
+                if (WINNER_NOTE)
                     p1Name = new Label("Winner of " + (topGame.round + 1) + "." + (topGame.gameNum + 1));
-                    // p1Name = new Label("");
-                }
-                else // Else it's a bye
-                    p1Name = new Label("Bye");
+                else
+                    p1Name = new Label("");
             }
             // Settings for p1's name
             p1Name.setPadding(new Insets(0, 0, 0, 5));
@@ -187,8 +196,10 @@ public class Game {
             else { // Else
                 if (bottomGame != null) { // If it has a child game
                     // Prepared for winner of that game
-                    p2Name = new Label("Winner of " + (bottomGame.round + 1) + "." + (bottomGame.gameNum + 1));
-                    // p2Name = new Label("");
+                    if (WINNER_NOTE)
+                        p2Name = new Label("Winner of " + (bottomGame.round + 1) + "." + (bottomGame.gameNum + 1));
+                    else
+                        p2Name = new Label("");
                 }
                 else // Else it's a bye
                     p2Name = new Label("Bye");
@@ -243,7 +254,7 @@ public class Game {
             score1.setTextFormatter(new TextFormatter<Integer>(new IntegerStringConverter(), 0, integerFilter));
             score1.setText("");
             
-            // P2s score
+            // P2's score
             score2 = new TextField();
             // Set p2's score settings
             score2.maxWidth(Bracket.SCORE_SIZE);
@@ -252,6 +263,7 @@ public class Game {
             score2.setTextFormatter(new TextFormatter<Integer>(new IntegerStringConverter(), 0, integerFilter));
             score2.setText("");
             
+            // If game isn't active, we don't want to be able to edit that text
             if (p1 == null || p2 == null) {
                 score1.setEditable(false);
                 score2.setEditable(false);
@@ -310,7 +322,7 @@ public class Game {
                         s1 = Integer.parseInt(score1.getText());
                     if (!score2.getText().equals(""))
                         s2 = Integer.parseInt(score2.getText());
-                    // 1st case warning message
+                    // If something's potentially wrong with their selection, let them know
                     if (result.get() == selectP1) {
                         if (s1 <= s2) {
                             Alert warnWin = new Alert(AlertType.NONE);
@@ -358,6 +370,7 @@ public class Game {
                         winWindow.close();
                         return;
                     }
+                    // Update game's status; can't edit anything for a finalized game
                     preWin.setVisible(false);
                     postWin.setVisible(true);
                     score1.setEditable(false);
@@ -500,8 +513,10 @@ public class Game {
         if (p1 != null && gameBox != null) // Label new playerin appropriate box
             gameBox.p1Name.setText(p1.name);
         else if (p1 == null) {
-            // gameBox.p1Name.setText("Winner of " + (topGame.round + 1) + "." + (topGame.gameNum + 1));
-            gameBox.p1Name.setText("");
+            if (WINNER_NOTE)
+                gameBox.p1Name.setText("Winner of " + (topGame.round + 1) + "." + (topGame.gameNum + 1));
+            else
+                gameBox.p1Name.setText("");
         }
         checkNewGame();
     }
@@ -530,8 +545,10 @@ public class Game {
         if (p2 != null && gameBox != null) // Label new player in appropriate box
             gameBox.p2Name.setText(p2.name);
         else if (p2 == null) {
-            gameBox.p2Name.setText("Winner of " + (bottomGame.round + 1) + "." + (bottomGame.gameNum + 1));
-            // gameBox.p2Name.setText("");
+            if (WINNER_NOTE)
+                gameBox.p2Name.setText("Winner of " + (bottomGame.round + 1) + "." + (bottomGame.gameNum + 1));
+            else
+                gameBox.p2Name.setText("");
         }
         checkNewGame();
     }
@@ -551,12 +568,11 @@ public class Game {
             else
                 parentGame.setP2(winner);
         }
-        // Updates the UI after the championship game
-        else {
+        else { // If grand finals
             Player first = p;
             Player second, third;
             second = (p == p1) ? p2 : p1;
-            if (topGame != null && bottomGame != null) {
+            if (topGame != null && bottomGame != null) { // Get the two or four relevant scores
                 int s11, s12, s21, s22;
                 s11 = (!topGame.gameBox.score1.getText().equals("")) ? Integer.parseInt(topGame.gameBox.score1.getText()) : 0;
                 s12 = (!topGame.gameBox.score2.getText().equals("")) ? Integer.parseInt(topGame.gameBox.score2.getText()) : 0;
@@ -565,13 +581,13 @@ public class Game {
                 Player pot1, pot2;
                 if (s11 >= s12) {
                     pot1 = topGame.p2;
-                    s11 = s12;
+                    s11 = s12; // So we only need to compare a single variable
                 }
                 else
                     pot1 = topGame.p1;
                 if (s21 >= s22) {
                     pot2 = bottomGame.p2;
-                    s21 = s22;
+                    s21 = s22; // So we only need to compare a single variable
                 }
                 else
                     pot2 = bottomGame.p1;
@@ -579,8 +595,7 @@ public class Game {
             }
             else
                 third = null;
-            Bracket.setResults(first, second, third);
-            
+            Bracket.setResults(first, second, third); // Update results
         }
     }
     

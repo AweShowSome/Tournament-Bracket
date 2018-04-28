@@ -1,23 +1,26 @@
-///////////////////////////////////////////////////////////////////////////////
-//                   
-// Title:            X4- Tournament Bracket
-// Files:            Bracket.java, Game.java, Main.java, Player.java, application.css, teams.txt
-//
-// Semester:         Spring 2018
-//
-// Lecturer's Name:  Debra Deppeler CS400
-//
-////////////////////////////////////////////////////////////////////////////////
 package application;
 
+///////////////////////////////////////////////////////////////////////////////
+//
+//Title:            X4- Tournament Bracket
+//Files:            Bracket.java, Game.java, Main.java, Player.java, application.css, teams.txt
+//
+//Semester:         Spring 2018
+//
+//Lecturer's Name:  Debra Deppeler CS400
+//
+////////////////////////////////////////////////////////////////////////////////
+
 /**
- * A player in the tournament. the class holds all properties of a participating team in the tournament.
+ * A player in the tournament.
+ * The class holds all of the properties of a participating team
+ * Basically a key-value pair.
  * 
+ *
  */
-public class Player implements Comparable<Player> {
-    String name;  //name of the team
-    int seed;     //the seed value which gives the team positions before the tournament starts to make games
-    int rank;     //rank of the team in the tournament
+public class Player {
+    String name; // Player's name
+    int seed; // Player's seed
     
     /*
      * constructor
@@ -25,10 +28,5 @@ public class Player implements Comparable<Player> {
     public Player(String name, int seed) {
         this.name = name;
         this.seed = seed;
-    }
-    
-    @Override
-    public int compareTo(Player o) {
-        return seed - o.seed;
     }
 }
