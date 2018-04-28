@@ -44,7 +44,7 @@ public class Main extends Application {
             e.printStackTrace();
         }
         
-        .args.launching the applications
+        //launching the applications
         launch(args);
     }
     

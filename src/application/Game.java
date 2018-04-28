@@ -43,6 +43,12 @@ public class Game {
     public Player winner; // Winner of the match
     private Game topGame, bottomGame, parentGame; // Gets relative location
     
+    /**
+     * Constructor for a game object
+     * @param round - round number that the game is on
+     * @param gameNum - what game number of this round
+     * @param parentGame - the next game that tree
+     */
     public Game(int round, int gameNum, Game parentGame) {
         p1 = null;
         p2 = null;
@@ -56,6 +62,14 @@ public class Game {
         }
     }
     
+    /**
+     * 
+     * @param p1 - first team
+     * @param p2 - second team
+     * @param round - round number that the game is on
+     * @param gameNum - what game number of this round
+     * @param parentGame - the next game that tree
+     */
     public Game(Player p1, Player p2, int round, int gameNum, Game parentGame) {
         this.p1 = p1;
         this.p2 = p2;
@@ -69,6 +83,10 @@ public class Game {
         }
     }
     
+    /**
+     * Creates the bracket view
+     * @param rounds
+     */
     public void createUI(ArrayList<VBox> rounds) {
         // Recursively work bottom up to create the games
         if (topGame != null)
@@ -262,11 +280,13 @@ public class Game {
                 // Bracket will update to reflect this
                 @Override
                 public void handle(ActionEvent e) {
+                	// creates the alert window with certain properties
                     Alert winWindow = new Alert(AlertType.NONE);
                     winWindow.initStyle(StageStyle.UTILITY);
                     winWindow.initModality(Modality.APPLICATION_MODAL);
                     winWindow.setContentText("Choose a Winner:");
                     
+                    // buttons in the alert window
                     ButtonType selectP1 = new ButtonType(p1.name);
                     ButtonType selectP2 = new ButtonType(p2.name);
                     ButtonType cancel = new ButtonType("Cancel");
@@ -277,10 +297,12 @@ public class Game {
                     int s1 = 0;
                     int s2 = 0;
                     
+                    // checks to see if the user selection of winner matches with scores entered
                     if (!score1.getText().equals(""))
                         s1 = Integer.parseInt(score1.getText());
                     if (!score2.getText().equals(""))
                         s2 = Integer.parseInt(score2.getText());
+                    // 1st case warning message
                     if (result.get() == selectP1) {
                         if (s1 <= s2) {
                             Alert warnWin = new Alert(AlertType.NONE);
@@ -302,6 +324,7 @@ public class Game {
                         }
                         setWinner(p1);
                     }
+                    // 2nd case warning message
                     else if (result.get() == selectP2) {
                         if (s1 >= s2) {
                             Alert warnWin = new Alert(AlertType.NONE);
@@ -513,12 +536,14 @@ public class Game {
      */
     public void setWinner(Player p) {
         winner = p;
+        // Update the parent game as long as it is not the championship game
         if (parentGame != null) {
             if (parentGame.topGame == this)
                 parentGame.setP1(winner);
             else
                 parentGame.setP2(winner);
         }
+        // Updates the UI after the championship game
         else {
             Player first = p;
             Player second, third;
