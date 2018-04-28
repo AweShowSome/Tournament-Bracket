@@ -1,3 +1,13 @@
+///////////////////////////////////////////////////////////////////////////////
+//                   
+// Title:            X4- Tournament Bracket
+// Files:            Bracket.java, Game.java, Main.java, Player.java
+//
+// Semester:         Spring 2018
+//
+// Lecturer's Name:  Debra Deppeler CS400
+//
+////////////////////////////////////////////////////////////////////////////////
 package application;
 
 import java.io.IOException;
@@ -44,7 +54,7 @@ public class Main extends Application {
             e.printStackTrace();
         }
         
-        //launching the applications
+       //launching the applications
         launch(args);
     }
     

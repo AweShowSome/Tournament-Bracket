@@ -1,8 +1,18 @@
+///////////////////////////////////////////////////////////////////////////////
+//                   
+// Title:            X4- Tournament Bracket
+// Files:            Bracket.java, Game.java, Main.java, Player.java
+//
+// Semester:         Spring 2018
+//
+// Lecturer's Name:  Debra Deppeler CS400
+//
+////////////////////////////////////////////////////////////////////////////////
+
 package application;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
@@ -14,10 +24,11 @@ import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
 
 /**
- * Bracket that holds the entire tournament
+ * Bracket that holds the entire tournament. 
+ * Bracket has information about all the games, rounds, players.
+ * This class also generates the UI and controls it. 
  * 
- * @author andreweng
- *
+ * Additionally, the application handles non 2^n number of teams by giving by's to teams.
  */
 public class Bracket {
     
