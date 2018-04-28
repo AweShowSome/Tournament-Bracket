@@ -2,6 +2,7 @@ package application;
 
 import java.util.ArrayList;
 import java.util.Optional;
+import java.util.function.UnaryOperator;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -15,11 +16,14 @@ import javafx.scene.control.Label;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TextFormatter;
+import javafx.scene.control.TextFormatter.Change;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Modality;
 import javafx.stage.StageStyle;
+import javafx.util.converter.IntegerStringConverter;
 
 /**
  * An individual game in the bracket
@@ -32,7 +36,6 @@ public class Game {
     // Round names for single elimination
     private static String[] roundsSingleElim = { "Finals", "Semi-Finals", "Top 8", "Top 16", "Top 32", "Top 64", "Top 128" };
     private Player p1, p2; // players 1 and 2 respectively
-    public int s1, s2; // Scores for player1 & player2 respectively
     private final int round, gameNum; // Round Game is part of (Correlates with array index its in)
     public static int roundCount = 0;
     public GameUI gameBox;
@@ -43,8 +46,6 @@ public class Game {
     public Game(int round, int gameNum, Game parentGame) {
         p1 = null;
         p2 = null;
-        s1 = 0;
-        s2 = 0;
         this.round = round;
         this.gameNum = gameNum;
         if (round > roundCount)
@@ -58,8 +59,6 @@ public class Game {
     public Game(Player p1, Player p2, int round, int gameNum, Game parentGame) {
         this.p1 = p1;
         this.p2 = p2;
-        s1 = 0;
-        s2 = 0;
         this.round = round;
         this.gameNum = gameNum;
         if (round >= roundCount)
@@ -80,11 +79,11 @@ public class Game {
         if (bottomGame == null && topGame == null) { // Last possible round; Only round for byes
             if (p1 == null) {
                 setWinner(p2);
-                return; // Doesn't create the game box
+                // return; // Doesn't create the game box
             }
             else if (p2 == null) {
                 setWinner(p1);
-                return; // Doesn't create the game box
+                // return; // Doesn't create the game box
             }
         }
         
@@ -140,9 +139,11 @@ public class Game {
             if (p1 != null) // If player1 exists
                 p1Name = new Label(p1.name); // Display name
             else { // Else
-                if (topGame != null) // If it has a child game
+                if (topGame != null) { // If it has a child game
                     // Prepared for winner of that game
                     p1Name = new Label("Winner of " + (topGame.round + 1) + "." + (topGame.gameNum + 1));
+                    // p1Name = new Label("");
+                }
                 else // Else it's a bye
                     p1Name = new Label("Bye");
             }
@@ -158,9 +159,11 @@ public class Game {
             if (p2 != null) // If player2 exists
                 p2Name = new Label(p2.name); // Display name
             else { // Else
-                if (bottomGame != null) // If it has a child game
+                if (bottomGame != null) { // If it has a child game
                     // Prepared for winner of that game
                     p2Name = new Label("Winner of " + (bottomGame.round + 1) + "." + (bottomGame.gameNum + 1));
+                    // p2Name = new Label("");
+                }
                 else // Else it's a bye
                     p2Name = new Label("Bye");
             }
@@ -172,6 +175,38 @@ public class Game {
             p2Name.setId("namebox");
             p2Name.setAlignment(Pos.CENTER_LEFT);
             
+            UnaryOperator<Change> integerFilter = change -> {
+                String newText = change.getControlNewText();
+                // if proposed change results in a valid value, return change as-is:
+                if (newText.matches("-?(([1-9][0-9]*)|0)?")) {
+                    return change;
+                }
+                else if ("-".equals(change.getText())) {
+                    
+                    // if user types or pastes a "-" in middle of current text,
+                    // toggle sign of value:
+                    
+                    if (change.getControlText().startsWith("-")) {
+                        // if we currently start with a "-", remove first character:
+                        change.setText("");
+                        change.setRange(0, 1);
+                        // since we're deleting a character instead of adding one,
+                        // the caret position needs to move back one, instead of
+                        // moving forward one, so we modify the proposed change to
+                        // move the caret two places earlier than the proposed change:
+                        change.setCaretPosition(change.getCaretPosition() - 2);
+                        change.setAnchor(change.getAnchor() - 2);
+                    }
+                    else {
+                        // otherwise just insert at the beginning of the text:
+                        change.setRange(0, 0);
+                    }
+                    return change;
+                }
+                // invalid change, veto it by returning null:
+                return null;
+            };
+            
             // Scores for p1 and p2
             // P1's score
             score1 = new TextField();
@@ -179,6 +214,8 @@ public class Game {
             score1.maxWidth(Bracket.SCORE_SIZE);
             score1.setPrefWidth(Bracket.SCORE_SIZE);
             score1.setMinWidth(Bracket.SCORE_SIZE);
+            score1.setTextFormatter(new TextFormatter<Integer>(new IntegerStringConverter(), 0, integerFilter));
+            score1.setText("");
             
             // P2s score
             score2 = new TextField();
@@ -186,6 +223,8 @@ public class Game {
             score2.maxWidth(Bracket.SCORE_SIZE);
             score2.setPrefWidth(Bracket.SCORE_SIZE);
             score2.setMinWidth(Bracket.SCORE_SIZE);
+            score2.setTextFormatter(new TextFormatter<Integer>(new IntegerStringConverter(), 0, integerFilter));
+            score2.setText("");
             
             if (p1 == null || p2 == null) {
                 score1.setEditable(false);
@@ -234,10 +273,56 @@ public class Game {
                     winWindow.getButtonTypes().setAll(selectP1, selectP2, cancel);
                     
                     Optional<ButtonType> result = winWindow.showAndWait();
-                    if (result.get() == selectP1)
+                    
+                    int s1 = 0;
+                    int s2 = 0;
+                    
+                    if (!score1.getText().equals(""))
+                        s1 = Integer.parseInt(score1.getText());
+                    if (!score2.getText().equals(""))
+                        s2 = Integer.parseInt(score2.getText());
+                    if (result.get() == selectP1) {
+                        if (s1 <= s2) {
+                            Alert warnWin = new Alert(AlertType.NONE);
+                            warnWin.initStyle(StageStyle.UTILITY);
+                            warnWin.initModality(Modality.APPLICATION_MODAL);
+                            warnWin.setContentText("Player 1's score isn't greater than Player 2's score.\nAre you sure about this?");
+                            
+                            ButtonType yes = new ButtonType("Yes");
+                            ButtonType no = new ButtonType("No");
+                            
+                            warnWin.getButtonTypes().setAll(yes, no);
+                            
+                            Optional<ButtonType> warnRes = warnWin.showAndWait();
+                            if (warnRes.get() != yes) {
+                                warnWin.close();
+                                return;
+                            }
+                            warnWin.close();
+                        }
                         setWinner(p1);
-                    else if (result.get() == selectP2)
+                    }
+                    else if (result.get() == selectP2) {
+                        if (s1 >= s2) {
+                            Alert warnWin = new Alert(AlertType.NONE);
+                            warnWin.initStyle(StageStyle.UTILITY);
+                            warnWin.initModality(Modality.APPLICATION_MODAL);
+                            warnWin.setContentText("Player 2's score isn't greater than Player 1's score.\nAre you sure about this?");
+                            
+                            ButtonType yes = new ButtonType("Yes");
+                            ButtonType no = new ButtonType("No");
+                            
+                            warnWin.getButtonTypes().setAll(yes, no);
+                            
+                            Optional<ButtonType> warnRes = warnWin.showAndWait();
+                            if (warnRes.get() != ButtonType.OK) {
+                                warnWin.close();
+                                return;
+                            }
+                            warnWin.close();
+                        }
                         setWinner(p2);
+                    }
                     else {
                         winWindow.close();
                         return;
@@ -316,7 +401,7 @@ public class Game {
         String s = roundsSingleElim[round] + ":\n";
         if (p1 != null && p2 != null) {
             s += p1.name + " vs " + p2.name;
-            s += "\nScore: " + s1 + " : " + s2;
+            s += "\nScore: " + gameBox.score1.getText() + " : " + gameBox.score2.getText();
             if (winner != null)
                 s += "Winner: " + winner.name;
         }
@@ -383,8 +468,10 @@ public class Game {
         this.p1 = p1;
         if (p1 != null && gameBox != null) // Label new playerin appropriate box
             gameBox.p1Name.setText(p1.name);
-        else if (p1 == null)
-            gameBox.p1Name.setText("Winner of " + (topGame.round + 1) + "." + (topGame.gameNum + 1));
+        else if (p1 == null) {
+            // gameBox.p1Name.setText("Winner of " + (topGame.round + 1) + "." + (topGame.gameNum + 1));
+            gameBox.p1Name.setText("");
+        }
         checkNewGame();
     }
     
@@ -411,8 +498,10 @@ public class Game {
         this.p2 = p2;
         if (p2 != null && gameBox != null) // Label new player in appropriate box
             gameBox.p2Name.setText(p2.name);
-        else if (p2 == null)
+        else if (p2 == null) {
             gameBox.p2Name.setText("Winner of " + (bottomGame.round + 1) + "." + (bottomGame.gameNum + 1));
+            gameBox.p2Name.setText("");
+        }
         checkNewGame();
     }
     
@@ -429,6 +518,36 @@ public class Game {
                 parentGame.setP1(winner);
             else
                 parentGame.setP2(winner);
+        }
+        else {
+            Player first = p;
+            Player second, third;
+            second = (p == p1) ? p2 : p1;
+            if (topGame != null && bottomGame != null) {
+                int s11, s12, s21, s22;
+                s11 = Integer.parseInt(topGame.gameBox.score1.getText());
+                s12 = Integer.parseInt(topGame.gameBox.score2.getText());
+                s21 = Integer.parseInt(bottomGame.gameBox.score1.getText());
+                s22 = Integer.parseInt(bottomGame.gameBox.score2.getText());
+                Player pot1, pot2;
+                if (s11 >= s12) {
+                    pot1 = topGame.p2;
+                    s11 = s12;
+                }
+                else
+                    pot1 = topGame.p1;
+                if (s21 >= s22) {
+                    pot2 = bottomGame.p2;
+                    s21 = s22;
+                }
+                else
+                    pot2 = bottomGame.p1;
+                third = (s11 >= s22) ? pot1 : pot2;
+            }
+            else
+                third = null;
+            Bracket.setResults(first, second, third);
+            
         }
     }
     
