@@ -138,10 +138,9 @@ public class Bracket {
         ArrayList<VBox> matchRounds;
         
         public BracketUI() {
-            scroll = new ScrollPane();
-            
+          
+        	scroll = new ScrollPane();
             resultsBox = new VBox();
-            
             root = new BorderPane();
             root.setPadding(new Insets(20, 20, 20, 20));
             // setting background color

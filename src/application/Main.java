@@ -16,6 +16,7 @@ public class Main extends Application {
     
     @Override
     public void start(Stage primaryStage) {
+    	
         primaryStage.setTitle("Tournement Generator");
         
         // Set Scene
@@ -27,7 +28,9 @@ public class Main extends Application {
     }
     
     public static void main(String[] args) {
-        List<String> players;
+        List<String> players;	//list of all teams participating in the tournament.
+        
+        //reading the file to get all teams
         try {
             players = Files.readAllLines(Paths.get(args[0]));
             List<String> act = new ArrayList<String>();
@@ -41,6 +44,7 @@ public class Main extends Application {
             e.printStackTrace();
         }
         
+        .args.launching the applications
         launch(args);
     }
     
