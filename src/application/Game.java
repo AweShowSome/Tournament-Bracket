@@ -1,19 +1,16 @@
 package application;
 
 import java.util.ArrayList;
-import java.util.Optional;
 import java.util.function.UnaryOperator;
+
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.geometry.Side;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.ButtonType;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.MenuButton;
-import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
 import javafx.scene.control.TextFormatter.Change;
@@ -21,7 +18,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Modality;
-import javafx.stage.StageStyle;
 import javafx.util.converter.IntegerStringConverter;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -141,8 +137,7 @@ public class Game {
         HBox options; // Holds the match name, the match, and the button to submit scores
         VBox match; // Holds the players' data
         Label matchName; // The Label for the match
-        MenuButton but; // The button selecting for options
-        MenuItem preWin, postWin; // Options the button has
+        Button setMatch; // Finalizes match scores and automatically selects winner
         HBox play1, play2; // Player 1 and 2's boxes for their name and scores
         Label p1Name, p2Name; // p1 and p2's names respectively
         TextField score1, score2; // p1 and p2's scores respectively
@@ -215,7 +210,7 @@ public class Game {
             UnaryOperator<Change> integerFilter = change -> {
                 String newText = change.getControlNewText();
                 // if proposed change results in a valid value, return change as-is:
-                if (newText.matches("-?(([1-9][0-9]*)|0)?")) {
+                if (newText.matches("(([1-9][0-9]*)|0)?")) {
                     return change;
                 }
                 else if ("-".equals(change.getText())) {
@@ -280,145 +275,48 @@ public class Game {
             // Add match to options
             options.getChildren().add(match);
             
-            // Finally create the button
-            // Button for selecting winner of that match
-            // but = new Button("S\nE\nT");
-            but = new MenuButton("•\n•\n•");
-            // Settings
-            but.setStyle("-fx-font: 12 arial");
-            but.setPrefSize(10, 60);
-            but.setAlignment(Pos.CENTER);
-            but.setPopupSide(Side.RIGHT);
+            setMatch = new Button("•\n•\n•");
+            setMatch.setStyle("-fx-font: 12 arial");
+            setMatch.setPrefSize(10, 60);
+            setMatch.setAlignment(Pos.CENTER);
             
-            // Set menu items/options to be done
-            preWin = new MenuItem("Select Winner");
-            postWin = new MenuItem("Modify Game Results");
-            
-            // Set action on mouse click/enter
-            preWin.setOnAction(new EventHandler<ActionEvent>() {
-                // Creates an alert allowing the user to select a winner
-                // Bracket will update to reflect this
+            setMatch.setOnAction(new EventHandler<ActionEvent>() {
+                
                 @Override
-                public void handle(ActionEvent e) {
-                	// creates the alert window with certain properties
-                    Alert winWindow = new Alert(AlertType.NONE);
-                    winWindow.initStyle(StageStyle.UTILITY);
-                    winWindow.initModality(Modality.APPLICATION_MODAL);
-                    winWindow.setContentText("Choose a Winner:");
-                    
-                    // buttons in the alert window
-                    ButtonType selectP1 = new ButtonType(p1.name);
-                    ButtonType selectP2 = new ButtonType(p2.name);
-                    ButtonType cancel = new ButtonType("Cancel");
-                    winWindow.getButtonTypes().setAll(selectP1, selectP2, cancel);
-                    
-                    Optional<ButtonType> result = winWindow.showAndWait();
-                    
+                public void handle(ActionEvent event) {
                     int s1 = 0;
                     int s2 = 0;
-                    
-                    // checks to see if the user selection of winner matches with scores entered
                     if (!score1.getText().equals(""))
                         s1 = Integer.parseInt(score1.getText());
                     if (!score2.getText().equals(""))
                         s2 = Integer.parseInt(score2.getText());
-                    // If something's potentially wrong with their selection, let them know
-                    if (result.get() == selectP1) {
-                        if (s1 <= s2) {
-                            Alert warnWin = new Alert(AlertType.NONE);
-                            warnWin.initStyle(StageStyle.UTILITY);
-                            warnWin.initModality(Modality.APPLICATION_MODAL);
-                            warnWin.setContentText("Player 1's score isn't greater than Player 2's score.\nAre you sure about this?");
-                            
-                            ButtonType yes = new ButtonType("Yes");
-                            ButtonType no = new ButtonType("No");
-                            
-                            warnWin.getButtonTypes().setAll(yes, no);
-                            
-                            Optional<ButtonType> warnRes = warnWin.showAndWait();
-                            if (warnRes.get() != yes) {
-                                warnWin.close();
-                                return;
-                            }
-                            warnWin.close();
-                        }
+                    if (s1 > s2)
                         setWinner(p1);
-                    }
-                    // 2nd case warning message
-                    else if (result.get() == selectP2) {
-                        if (s1 >= s2) {
-                            Alert warnWin = new Alert(AlertType.NONE);
-                            warnWin.initStyle(StageStyle.UTILITY);
-                            warnWin.initModality(Modality.APPLICATION_MODAL);
-                            warnWin.setContentText("Player 2's score isn't greater than Player 1's score.\nAre you sure about this?");
-                            
-                            ButtonType yes = new ButtonType("Yes");
-                            ButtonType no = new ButtonType("No");
-                            
-                            warnWin.getButtonTypes().setAll(yes, no);
-                            
-                            Optional<ButtonType> warnRes = warnWin.showAndWait();
-                            if (warnRes.get() != ButtonType.OK) {
-                                warnWin.close();
-                                return;
-                            }
-                            warnWin.close();
-                        }
+                    else if (s1 < s2)
                         setWinner(p2);
-                    }
                     else {
-                        winWindow.close();
-                        return;
+                        Alert warning = new Alert(AlertType.WARNING);
+                        warning.setContentText("The game is tied. You cannot select a winner");
+                        warning.initModality(Modality.APPLICATION_MODAL);
+                        warning.showAndWait();
                     }
-                    // Update game's status; can't edit anything for a finalized game
-                    preWin.setVisible(false);
-                    postWin.setVisible(true);
-                    score1.setEditable(false);
-                    score2.setEditable(false);
-                    winWindow.close();
                 }
-            });
-            
-            // Set action on mouse click/enter
-            postWin.setOnAction(new EventHandler<ActionEvent>() {
                 
-                // Allows for modification of prior games if necessary
-                @Override
-                public void handle(ActionEvent e) {
-                    Alert modWin = new Alert(AlertType.NONE);
-                    modWin.initStyle(StageStyle.UTILITY);
-                    modWin.initModality(Modality.APPLICATION_MODAL);
-                    modWin.setContentText("Are you sure?");
-                    ButtonType yes = new ButtonType("Yes");
-                    ButtonType no = new ButtonType("No");
-                    modWin.getButtonTypes().setAll(yes, no);
-                    Optional<ButtonType> result = modWin.showAndWait();
-                    if (result.get() == yes) {
-                        preWin.setVisible(true);
-                        postWin.setVisible(false);
-                        score1.setEditable(true);
-                        score2.setEditable(true);
-                    }
-                    else {
-                        modWin.close();
-                        return;
-                    }
-                    modWin.close();
-                }
             });
-            
             if (winner == null) { // For non byes
-                postWin.setVisible(false);
+                // postWin.setVisible(false);
                 if (p1 == null || p2 == null)
                     // Buttons will be reenabled when two players exist in the game
-                    but.setDisable(true);
+                    // but.setDisable(true);
+                    setMatch.setDisable(true);
             }
-            else // For byes
-                but.setDisable(true);
+            else { // For byes
+                   // but.setDisable(true);
+                setMatch.setDisable(true);
+            }
+            // but.getItems().addAll(preWin, postWin);
             
-            but.getItems().addAll(preWin, postWin);
-            
-            options.getChildren().add(but);
+            options.getChildren().add(setMatch);
         }
         
     }
@@ -433,7 +331,8 @@ public class Game {
         if (p1 != null && p2 != null && gameBox != null) {
             gameBox.score1.setEditable(true);
             gameBox.score2.setEditable(true);
-            gameBox.but.setDisable(false);
+            // gameBox.but.setDisable(false);
+            gameBox.setMatch.setDisable(false);
         }
     }
     
@@ -505,9 +404,7 @@ public class Game {
             gameBox.score2.setText("");
             gameBox.score1.setEditable(false);
             gameBox.score2.setEditable(false);
-            gameBox.preWin.setVisible(true);
-            gameBox.postWin.setVisible(false);
-            gameBox.but.setDisable(true);
+            gameBox.setMatch.setDisable(true);
         }
         this.p1 = p1;
         if (p1 != null && gameBox != null) // Label new playerin appropriate box
@@ -537,9 +434,7 @@ public class Game {
             gameBox.score2.setText("");
             gameBox.score1.setEditable(false);
             gameBox.score2.setEditable(false);
-            gameBox.preWin.setVisible(true);
-            gameBox.postWin.setVisible(false);
-            gameBox.but.setDisable(true);
+            gameBox.setMatch.setDisable(true);
         }
         this.p2 = p2;
         if (p2 != null && gameBox != null) // Label new player in appropriate box
@@ -561,7 +456,6 @@ public class Game {
      */
     public void setWinner(Player p) {
         winner = p;
-        // Update the parent game as long as it is not the championship game
         if (parentGame != null) {
             if (parentGame.topGame == this)
                 parentGame.setP1(winner);
@@ -597,6 +491,7 @@ public class Game {
                 third = null;
             Bracket.setResults(first, second, third); // Update results
         }
+        gameBox.setMatch.setDisable(true); // Can only select once
     }
     
     /**
